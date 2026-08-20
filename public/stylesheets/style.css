@@ -51,11 +51,45 @@ a { color: var(--accent); } a:hover { color: #1e5056; }
 .notification-row label { margin: 0; } .notification-row:not(.header) > div:not(:first-child) { display: flex; justify-content: center; }
 .form-check-input { border-color: #aebdb9; } .form-check-input:checked { background-color: var(--accent); border-color: var(--accent); } .form-switch .form-check-input { width: 2.1em; }
 .settings-actions { display: flex; justify-content: flex-end; margin-top: 20px; } footer { color: var(--muted) !important; font-size: 13px; }
+.field-study-summary { display: grid; grid-template-columns: repeat(3, 1fr); margin-bottom: 20px; }
+.field-study-summary-item { padding: 20px; border-left: 1px solid var(--border); }
+.field-study-summary-item:first-child { border-left: 0; }
+.field-study-summary-item strong { display: block; font-size: 22px; margin-top: 7px; }
+.field-study-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.species-card { color: var(--text); display: block; overflow: hidden; text-decoration: none; transition: border-color .15s ease, transform .15s ease; }
+.species-card:hover { color: var(--text); border-color: #b8cfca; transform: translateY(-2px); }
+.species-card-image { align-items: center; background: #e8edeb; display: flex; height: 210px; justify-content: center; overflow: hidden; }
+.species-card-image img, .species-wiki-image img { height: 100%; object-fit: cover; width: 100%; }
+.species-card-image-empty { color: var(--accent); font-size: 28px; }
+.species-card-body { padding: 20px; }
+.species-card-body h2 { font-size: 21px; margin: 7px 0 8px; }
+.species-card-body p { color: var(--muted); font-size: 14px; margin: 0 0 20px; }
+.species-card-meta { border-top: 1px solid var(--border); color: var(--muted); display: flex; font-size: 12px; justify-content: space-between; padding-top: 13px; }
+.back-link { display: inline-block; font-size: 13px; font-weight: 650; margin-bottom: 12px; text-decoration: none; }
+.back-link i { margin-right: 6px; }
+.species-wiki-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 20px; }
+.species-wiki-sidebar { display: grid; align-content: start; gap: 16px; }
+.species-wiki-image { align-items: center; background: #e8edeb; display: flex; height: 280px; justify-content: center; overflow: hidden; }
+.species-facts { display: grid; gap: 16px; padding: 20px; }
+.species-facts div + div { border-top: 1px solid var(--border); padding-top: 16px; }
+.species-facts strong { display: block; font-size: 19px; margin-top: 5px; }
+.species-wiki-content { display: grid; gap: 20px; }
+.species-wiki-intro { align-items: center; display: flex; gap: 18px; padding: 22px; }
+.species-wiki-intro p { font-size: 16px; font-weight: 600; line-height: 1.7; margin: 0; }
+.wiki-initial { color: var(--accent); font-family: Georgia, serif; font-size: 68px; line-height: 1; }
+.species-wiki-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.species-wiki-section { min-height: 160px; padding: 22px; }
+.species-wiki-section h2 { font-size: 18px; margin: 0 0 18px; }
+.species-wiki-section h2 i { color: var(--accent); font-size: 16px; margin-right: 9px; }
+.species-wiki-section p { color: var(--muted); line-height: 1.75; margin: 0; }
 .text-primary, .text-muted, .text-warning, .text-danger, .text-info, .text-success { color: inherit !important; } .toast { border: 1px solid var(--border); box-shadow: 0 8px 25px rgba(32,42,45,.12); }
 *:focus-visible { outline: 3px solid rgba(45, 105, 112, .35); outline-offset: 2px; }
 @media (max-width: 800px) { .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .analytics-grid { grid-template-columns: 1fr; } .page-heading { align-items: start; } }
+@media (max-width: 900px) { .field-study-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .species-wiki-layout { grid-template-columns: 220px minmax(0, 1fr); } }
 @media (max-width: 576px) { .navbar { padding: 0 16px; margin-bottom: 20px; } .container { padding-left: 16px; padding-right: 16px; }
   .page-heading { display: block; } .page-heading h1 { font-size: 27px; } .updated-label { text-align: left; margin-top: 12px; }
   .metric-grid { gap: 8px; } .metric-card { min-height: 112px; padding: 15px; } .metric-value { font-size: 21px; }
+  .field-study-summary { grid-template-columns: 1fr; } .field-study-summary-item { border-left: 0; border-top: 1px solid var(--border); } .field-study-summary-item:first-child { border-top: 0; }
+  .field-study-grid, .species-wiki-columns, .species-wiki-layout { grid-template-columns: 1fr; } .species-wiki-image { height: 220px; }
   .section-header, .section-body { padding-left: 16px; padding-right: 16px; } .notification-row { grid-template-columns: minmax(130px, 1fr) 66px 54px 48px; padding: 0 9px; font-size: 13px; } .settings-section { padding: 16px; }
 }

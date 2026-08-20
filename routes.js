@@ -5,6 +5,7 @@ const router = express.Router();
 const dashboard = require("./controllers/dashboard.js");
 const account = require("./controllers/account.js");
 const api = require("./controllers/api.js");
+const fieldStudy = require("./controllers/field-study.js");
 
 // App
 router.get("/", dashboard.index);
@@ -13,6 +14,8 @@ router.post("/authenticate", account.authenticate);
 router.get("/logout", account.logout);
 router.get("/users/:id", account.edit);
 router.post("/users/:id/save-details", account.saveDetails);
+router.get("/field-study", fieldStudy.index);
+router.get("/field-study/:species", fieldStudy.wiki);
 
 // API
 router.get("/api/update-weather", api.updateWeather);
