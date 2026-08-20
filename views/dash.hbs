@@ -40,12 +40,12 @@
 
 <!-- Bird Species Breakdown Chart -->
 <div class="analytics-grid">
-  <div class="section-card"><div class="section-header"><h2>Species observed</h2><p>All-time bird sightings</p></div><div class="section-body chart-wrap">
+  <div class="section-card"><div class="section-header"><h2>Species observed today</h2><p>Bird sightings recorded since midnight</p></div><div class="section-body chart-wrap">
         <canvas id="trendsGraph" height="120"></canvas>
   </div></div>
 
   <!-- Weekly Sightings Chart -->
-  <div class="section-card"><div class="section-header"><h2>Sightings this week</h2><p>Birds compared with cats</p></div><div class="section-body chart-wrap">
+  <div class="section-card"><div class="section-header"><h2>Sightings today</h2><p>Birds compared with cats</p></div><div class="section-body chart-wrap">
         <canvas id="barChart" height="300"></canvas>
   </div></div>
 
@@ -260,16 +260,16 @@ birdsRef.once("value", function (snapshot) {
         }
     })
 
-    // get breakdown of total bird species spotted
+    // get breakdown of today's bird species spotted
     birdBreakdown = {}
-    birdSpecies = [...new Set(birdSightings.map(sighting => sighting.species))]
+    birdSpecies = [...new Set(birdSightingsToday.map(sighting => sighting.species))]
 
     birdSpecies.forEach((bird) => {
-        birdBreakdown[bird] = birdSightings.filter(sighting => sighting.species === bird).length
+        birdBreakdown[bird] = birdSightingsToday.filter(sighting => sighting.species === bird).length
     })
 
     // create doughnut chart and populate it with data
-    if (birdSightings.length) {
+    if (birdSightingsToday.length) {
         const ctx = document.getElementById("trendsGraph").getContext("2d");
         const otherOptions = {
             type: "doughnut",
@@ -284,6 +284,8 @@ birdsRef.once("value", function (snapshot) {
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     x: {
                         type: "timeseries",
@@ -334,28 +336,28 @@ birdsRef.once("value", function (snapshot) {
             }
         })
 
-        // group week's sightings per day
+        // group today's sightings
         weeklyBreakdown = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 }
         birdWeekly = { ...weeklyBreakdown }
         catWeekly = { ...weeklyBreakdown }
-        birdSightingsThisWeek.forEach((weekSighting) => {
-            birdWeekly[new Date(weekSighting.timestamp).getDay()] += 1
+        birdSightingsToday.forEach((todaySighting) => {
+            birdWeekly[new Date(todaySighting.timestamp).getDay()] += 1
         })
-        catSightingsThisWeek.forEach((catSighting) => {
+        catSightingsToday.forEach((catSighting) => {
             catWeekly[new Date(catSighting.timestamp).getDay()] += 1
         })
 
         // create bar chart and populate the data with bird and cat sightings
         const barChartData = {
-            labels: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            labels: ["Today"],
             datasets: [{
                 label: 'Bird Sightings',
-                data: Object.values(birdWeekly),
+                data: [birdSightingsToday.length],
                 backgroundColor: '#80b1d3'
             },
             {
                 label: 'Cat Sightings',
-                data: Object.values(catWeekly),
+                data: [catSightingsToday.length],
                 backgroundColor: '#fb8072'
             }]
         };
