@@ -1,172 +1,56 @@
 {{> menu id="dashboard" isAuthUser=true}}
 
- <h2 class="text-center mb-5">
-  <i class="fa fa-chart-simple"></i>
-  Dashboard
-</h2>
+<div class="page-heading">
+  <div><h1>Dashboard</h1><p>Live activity and environmental conditions</p></div>
+  <div class="updated-label">Last updated <strong id="stateTimestamp">Loading...</strong></div>
+</div>
 
 <!-- Status Panel -->
-<div class="row mb-2" id="statusPanel">
-  <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-              Status</div>
-            <div class="h5 mb-0 font-weight-bold" id="statusText">Loading...</div>
-          </div>
-          <div class="col-auto">
-            <i id="statusIcon"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
-              Temperature</div>
-            <div class="h5 mb-0 font-weight-bold" id="deviceTemp">Loading...</div>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-temperature-half fa-2x text-danger"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-              Humidity</div>
-            <div class="h5 mb-0 font-weight-bold" id="deviceHumdity">Loading...</div>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-droplet fa-2x text-info"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-              Pressure</div>
-            <div class="h5 mb-0 font-weight-bold" id="devicePressure">Loading...</div>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-water fa-2x text-success"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="row text-center">
-    <p class="text-secondary">
-      Updated on: <strong><span id="stateTimestamp">Loading...</span></strong>
-    </p>
-  </div>
-
+<div class="metric-grid" id="statusPanel">
+  <div class="metric-card"><div><div class="metric-label">Current activity</div><div class="metric-value status-value" id="statusText">Loading...</div><div class="metric-context">Camera status</div></div><i id="statusIcon" class="metric-icon status-icon"></i></div>
+  <div class="metric-card"><div><div class="metric-label">Temperature</div><div class="metric-value" id="deviceTemp">Loading...</div><div class="metric-context">Ambient reading</div></div><i class="fas fa-temperature-half metric-icon"></i></div>
+  <div class="metric-card"><div><div class="metric-label">Humidity</div><div class="metric-value" id="deviceHumdity">Loading...</div><div class="metric-context">Relative humidity</div></div><i class="fas fa-droplet metric-icon"></i></div>
+  <div class="metric-card"><div><div class="metric-label">Pressure</div><div class="metric-value" id="devicePressure">Loading...</div><div class="metric-context">Atmospheric pressure</div></div><i class="fas fa-water metric-icon"></i></div>
 </div>
 
 <!-- Latest Image -->
-<div class="row mt-2">
-  <div class="col-lg-12">
-    <div class="card shadow mb-4">
-      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">Latest Image</h6>
-
-      </div>
-      <div class="card-body latest-image">
+<div class="section-card">
+      <div class="section-header"><h2>Latest sighting</h2><p>Most recent frame from the feeder camera</p></div>
+      <div class="section-body latest-image">
         <img
           src="https://cdn.glitch.global/64342653-fbd5-4e94-9f9b-1cfbd9621e62/thumbnails%2Fplaceholder.jpg?1670400233050"
           id="photo" alt="Last Captured Image" class="card-img-bottom" />
       </div>
-      <div class="card-footer">
-        <p class="text-center mt-2" id="timestamp">Loading..</p>
-      </div>
-
-    </div>
-  </div>
-
+      <div class="section-body pt-0"><p class="sighting-meta" id="timestamp">Loading...</p></div>
 </div>
 
 <!-- Admin Panel -->
 {{#if isAdmin}}
-<div class="row">
-  <div class="col-lg-12 mb-6 mt-3">
-    <div class="card shadow">
-      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">Admin Controls</h6>
-      </div>
-      <!-- Admin Buttons -->
-      <div class="card-body">
-        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mt-3 mb-3">
-          <button class="btn btn-secondary btn-lg cmd-btn" onclick="getWeather()">
-            <i class="fa fa-sun"></i><br />Update
-          </button>
-          <button class="btn btn-success btn-lg cmd-btn px-4" onclick="makeSound('insect')">
-            <i class="fa fa-bug"></i><br />Sound
-          </button>
-          <button class="btn btn-success btn-lg cmd-btn" onclick="makeSound('birds')">
-            <i class="fa fa-crow"></i><br />Sound
-          </button>
-          <button class="btn btn-success btn-lg cmd-btn" onclick="makeSound('water')">
-            <i class="fa fa-water"></i><br />Sound
-          </button>
-          <button class="btn btn-warning btn-lg cmd-btn" onclick="makeSound('bark')">
-            <i class="fa fa-dog"></i><br />Sound
-          </button>
-        </div>
-      </div>
-    </div>
+<div class="section-card mt-4">
+  <div class="section-header"><h2>Device controls</h2><p>Send a command to the feeder hardware</p></div>
+  <div class="section-body controls-grid">
+    <button class="btn btn-outline-secondary cmd-btn" onclick="getWeather()"><i class="fa fa-sun me-2"></i>Update weather</button>
+    <button class="btn btn-outline-secondary cmd-btn" onclick="makeSound('insect')"><i class="fa fa-bug me-2"></i>Insect sound</button>
+    <button class="btn btn-outline-secondary cmd-btn" onclick="makeSound('birds')"><i class="fa fa-crow me-2"></i>Bird sound</button>
+    <button class="btn btn-outline-secondary cmd-btn" onclick="makeSound('water')"><i class="fa fa-water me-2"></i>Water sound</button>
+    <button class="btn btn-outline-warning cmd-btn" onclick="makeSound('bark')"><i class="fa fa-dog me-2"></i>Cat deterrent</button>
   </div>
 </div>
 {{/if}}
 
 <!-- Bird Species Breakdown Chart -->
-<div class="row mt-4">
-  <div class="col-lg-6 mt-3">
-    <div class="card shadow mb-4">
-      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">Types of Birds Spotted - All Time</h6>
-      </div>
-      <div class="card-body">
+<div class="analytics-grid">
+  <div class="section-card"><div class="section-header"><h2>Species observed</h2><p>All-time bird sightings</p></div><div class="section-body chart-wrap">
         <canvas id="trendsGraph" height="120"></canvas>
-      </div>
-    </div>
-  </div>
+  </div></div>
 
   <!-- Weekly Sightings Chart -->
-  <div class="col-lg-6 mt-3">
-    <div class="card shadow mb-4">
-      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">Sightings - This Week</h6>
-      </div>
-      <div class="card-body">
+  <div class="section-card"><div class="section-header"><h2>Sightings this week</h2><p>Birds compared with cats</p></div><div class="section-body chart-wrap">
         <canvas id="barChart" height="300"></canvas>
-      </div>
-    </div>
-  </div>
+  </div></div>
 
   <!-- Today's Sightings Tables -->
-  <div class="col-lg-12 mt-3">
-    <div class="card shadow mb-4">
-      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h6 class="m-0 font-weight-bold text-primary">Sightings - Today</h6>
-      </div>
-      <div class="card-body">
+  <div class="section-card analytics-table-card"><div class="section-header"><h2>Today's sightings</h2><p>Recorded activity since midnight</p></div><div class="section-body">
         <div id="tabs">
           <div class="container">
             <div class="row">
@@ -175,46 +59,43 @@
                 <nav>
                   <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" id="nav-birds-tab" data-toggle="tab" href="#nav-birds"
-                      role="tab" aria-controls="nav-birds" aria-selected="true"><i class="fa fa-crow"></i> Bird
-                      Sightings</a>
+                      role="tab" aria-controls="nav-birds" aria-selected="true"><i class="fa fa-crow tab-icon" aria-hidden="true"></i>Birds</a>
                     <a class="nav-item nav-link" id="nav-cats-tab" data-toggle="tab" href="#nav-cats" role="tab"
-                      aria-controls="nav-cats" aria-selected="false"><i class="fa fa-cat"></i> Cat Sightings</a>
+                      aria-controls="nav-cats" aria-selected="false"><i class="fa fa-cat tab-icon" aria-hidden="true"></i>Cats</a>
                   </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
                   <div class="tab-pane show active" id="nav-birds" role="tabpanel" aria-labelledby="nav-birds-tab">
                     <!-- Bird Sightings Table -->
-                    <table class="table table-bordered dataTable" id="birdTable">
+                    <div class="table-wrap"><table class="table dataTable" id="birdTable">
                       <thead>
                         <tr class="text-primary">
                           <th data-field="id" data-formatter="IndexFormatter"></th>
-                          <th data-field="timestamp">Timestamp</th>
-                          <th data-field="species">Bird Species</th>
+                          <th data-field="timestamp" data-formatter="timeFormatter">Time</th>
+                          <th data-field="species">Species</th>
                           <th data-field="image" data-formatter="birdLinkFormatter">Image</th>
                         </tr>
                       </thead>
-                    </table>
+                    </table></div>
                   </div>
                   <div class="tab-pane" id="nav-cats" role="tabpanel" aria-labelledby="nav-cats-tab">
                     <!-- Cat Sightings Table -->
-                    <table class="table table-bordered dataTable" id="catTable">
+                    <div class="table-wrap"><table class="table dataTable" id="catTable">
                       <thead>
                         <tr class="text-primary">
                           <th data-field="id" data-formatter="IndexFormatter"></th>
-                          <th data-field="timestamp">Timestamp</th>
+                          <th data-field="timestamp" data-formatter="timeFormatter">Time</th>
                           <th data-field="image" data-formatter="catLinkFormatter">Image</th>
                         </tr>
                       </thead>
-                    </table>
+                    </table></div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+      </div></div>
 
 </div>
 
@@ -301,7 +182,7 @@ const constructTodaysSightings = function (sightings) {
     return todaysSightings;
 }
 
-// initialize firebase
+if (firebaseAPIKey && firebaseDatabase && firebaseId && firebaseAppId) {
 firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
 const database = firebase.database();
@@ -318,9 +199,9 @@ realTimeRef.limitToLast(1).on("value", function (snapshot) {
         const timestamp = childSnapshot.val()["timestamp"];
         const deviceData = childSnapshot.val()["device"];
         // update the status panel readings
-        document.getElementById("deviceTemp").innerText = deviceData.celcius + "C";
-        document.getElementById("deviceHumdity").innerText = deviceData.humidity;
-        document.getElementById("devicePressure").innerText = deviceData.pressure;
+        document.getElementById("deviceTemp").innerText = deviceData.celcius + " °C";
+        document.getElementById("deviceHumdity").innerText = deviceData.humidity + "%";
+        document.getElementById("devicePressure").innerText = deviceData.pressure + " hPa";
 
         if (image) {
             // get the latest image
@@ -417,7 +298,8 @@ birdsRef.once("value", function (snapshot) {
                 },
                 plugins: {
                     legend: {
-                        position: 'bottom'
+                        position: 'right',
+                        labels: { color: '#667477', padding: 14, usePointStyle: true, font: { size: 12 } }
                     }
                 }
             }
@@ -480,6 +362,15 @@ birdsRef.once("value", function (snapshot) {
         const barChartConfig = {
             type: 'bar',
             data: barChartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#667477' } },
+                    y: { beginAtZero: true, ticks: { precision: 0, color: '#667477' }, grid: { color: '#e5ebe9' } }
+                },
+                plugins: { legend: { labels: { color: '#667477', padding: 14, usePointStyle: true, font: { size: 12 } } } }
+            }
         };
         const barChartEl = document.getElementById("barChart").getContext("2d");
         const barChart = new Chart(barChartEl, barChartConfig);
@@ -498,11 +389,17 @@ function catLinkFormatter(value, row, index) {
 }
 
 function LinkFormatter(row, index, idVal) {
-    return "<a target='_blank' id='" + idVal + "-sighting-" + index + "' href='" + row.image + "'>" + row.image + "</a>";
+    if (!row.image) return "<span class='text-muted'>No image</span>";
+    return "<a target='_blank' id='" + idVal + "-sighting-" + index + "' href='" + row.image + "'>View image</a>";
 }
 
 function IndexFormatter(value, row, index) {
     return index += 1;
+}
+
+function timeFormatter(value) {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? value : date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
 
 
@@ -554,6 +451,8 @@ function getWeather() {
             toast.show()
             commandBtns.forEach(btn => btn.disabled = false)
         });
+}
+
 }
 
 </script>

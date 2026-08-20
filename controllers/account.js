@@ -64,7 +64,9 @@ const account = {
         firstName: request.body.firstName,
         lastName: request.body.lastName,
         email: request.body.email,
-        password: request.body.password,
+        // The settings page does not expose the existing password. Preserve it unless a future
+        // password-change flow explicitly supplies a new value.
+        password: request.body.password || user.password,
         phoneNumber: request.body.phone,
         notificationSettings: {
           bird: {

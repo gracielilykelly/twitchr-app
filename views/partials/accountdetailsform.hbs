@@ -1,175 +1,35 @@
-<form action="{{postUrl}}" class="align-items-center" method="POST">
-    <div class=" card shadow p-4 mt-4">
-        <h3 class="text-primary mb-3">User Details</h3>
+<form action="{{postUrl}}" method="POST">
+  <section class="section-card settings-section">
+    <h2>Profile</h2>
+    <p>Contact details used for account access and notifications.</p>
+    <div class="row g-3">
+      <div class="col-md-6"><label class="form-label" for="firstname">First name</label><input id="firstname" name="firstName" required type="text" value="{{user.firstName}}" class="form-control"></div>
+      <div class="col-md-6"><label class="form-label" for="lastname">Last name</label><input id="lastname" name="lastName" required type="text" value="{{user.lastName}}" class="form-control"></div>
+      <div class="col-md-6"><label class="form-label" for="email">Email</label><input id="email" name="email" required type="email" value="{{user.email}}" class="form-control"></div>
+      <div class="col-md-6"><label class="form-label" for="phone">Phone number</label><input id="phone" name="phone" required type="tel" value="{{user.phoneNumber}}" class="form-control"></div>
+    </div>
+  </section>
 
-        <div class="row mb-3">
-            <div class="col">
-                <div class="form-outline">
-                    <label class="form-label" for="firstName"><i class="fa fa-user"></i> First name</label>
-                    <input id="firstname" name="firstName" placeholder="First Name" required type="text"
-                        value="{{user.firstName}}" class="form-control">
+  <section class="section-card settings-section">
+    <h2>Notification preferences</h2>
+    <p>Choose which events to receive and how they should reach you.</p>
+    <div class="notification-grid">
+      <div class="notification-row header"><div>Notification</div><div>Enabled</div><div>Email</div><div>SMS</div></div>
+      <div class="notification-row"><div><label for="enableBirdNotifications">Bird sightings</label></div><div><div class="form-check form-switch"><input class="form-check-input" type="checkbox" name="enableBirdNotifications" value="true" id="enableBirdNotifications" {{#if user.notificationSettings.bird.receive}}checked{{/if}}></div></div><div><input class="form-check-input" type="checkbox" name="birdEmail" value="email" id="birdEmail" {{#if (includes user.notificationSettings.bird.commTypes 'email')}}checked{{/if}}><label class="visually-hidden" for="birdEmail">Bird sightings by email</label></div><div><input class="form-check-input" type="checkbox" name="birdSMS" value="sms" id="birdSMS" {{#if (includes user.notificationSettings.bird.commTypes 'sms')}}checked{{/if}}><label class="visually-hidden" for="birdSMS">Bird sightings by SMS</label></div></div>
+      <div class="notification-row"><div><label for="enableCatNotifications">Cat sightings</label></div><div><div class="form-check form-switch"><input class="form-check-input" type="checkbox" name="enableCatNotifications" value="true" id="enableCatNotifications" {{#if user.notificationSettings.cat.receive}}checked{{/if}}></div></div><div><input class="form-check-input" type="checkbox" name="catEmail" value="email" id="catEmail" {{#if (includes user.notificationSettings.cat.commTypes 'email')}}checked{{/if}}><label class="visually-hidden" for="catEmail">Cat sightings by email</label></div><div><input class="form-check-input" type="checkbox" name="catSMS" value="sms" id="catSMS" {{#if (includes user.notificationSettings.cat.commTypes 'sms')}}checked{{/if}}><label class="visually-hidden" for="catSMS">Cat sightings by SMS</label></div></div>
+      {{#if user.isAdmin}}
+      <div class="notification-row"><div><label for="enableWeatherNotifications">Weather alerts</label></div><div><div class="form-check form-switch"><input class="form-check-input" type="checkbox" name="enableWeatherNotifications" value="true" id="enableWeatherNotifications" {{#if user.notificationSettings.weather.receive}}checked{{/if}}></div></div><div><input class="form-check-input" type="checkbox" name="weatherEmail" value="email" id="weatherEmail" {{#if (includes user.notificationSettings.weather.commTypes 'email')}}checked{{/if}}><label class="visually-hidden" for="weatherEmail">Weather alerts by email</label></div><div><input class="form-check-input" type="checkbox" name="weatherSMS" value="sms" id="weatherSMS" {{#if (includes user.notificationSettings.weather.commTypes 'sms')}}checked{{/if}}><label class="visually-hidden" for="weatherSMS">Weather alerts by SMS</label></div></div>
+      {{/if}}
+    </div>
+  </section>
 
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-outline">
-                    <label class="form-label" for="lastname"><i class="fa fa-user"></i> Last Name</label>
-                    <input id="lastname" name="lastName" placeholder="Last Name" required type="text"
-                        value="{{user.lastName}}" class="form-control">
-                </div>
-            </div>
-          
-          <div class="col-12 mt-3">
-                <div class="form-outline">
-                    <label class="form-label" for="password"><i class="fa fa-lock"></i> Password</label>
-                    <input id="password" name="password" placeholder="Password" required type="password"
-                        value="{{user.password}}" class="form-control">
-                </div>
-            </div>
-        </div>
+  {{#if user.isAdmin}}
+  <section class="section-card settings-section">
+    <h2>Device location</h2>
+    <p>Used for local weather information.</p>
+    <div class="row g-3"><div class="col-md-6"><label class="form-label" for="feederLatitude">Latitude</label><input id="feederLatitude" type="number" name="feederLatitude" step="any" value="{{user.feeder.latitude}}" class="form-control"></div><div class="col-md-6"><label class="form-label" for="feederLongitude">Longitude</label><input id="feederLongitude" type="number" name="feederLongitude" step="any" value="{{user.feeder.longitude}}" class="form-control"></div></div>
+  </section>
+  {{/if}}
 
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="form-outline">
-                    <label class="form-label" for="email"><i class="fa fa-envelope"></i> Email</label>
-                    <input id="email" name="email" placeholder="Email" required type="email" value="{{user.email}}"
-                        class="form-control">
-                </div>
-            </div>
-            <div class="col-12 mt-3">
-                <div class="form-outline">
-                    <label class="form-label" for="phone"><i class="fa fa-phone"></i> Phone Number</label>
-                    <input id="phone" name="phone" placeholder="Phone Number" required type="tel"
-                        value="{{user.phoneNumber}}" class="form-control">
-                </div>
-            </div>
-        </div>
-
-        <hr />
-
-        <h3 class="text-primary mt-3 mb-4">Notification Settings</h3>
-
-        <div class="row mb-4">
-          <h6>
-            <i class="fa fa-crow"></i> Bird Notifications
-          </h6>
-            <div class="col">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" name="enableBirdNotifications" value="true"
-                        id="enableBirdNotifications" role="swtich" {{#if user.notificationSettings.bird.receive
-                        }}checked{{/if}}>
-                    <label class="form-check-label" for="enableBirdNotifications">Enable</label>
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="birdEmail" value="email" id="flexCheckDefault"
-                        {{#if (includes user.notificationSettings.bird.commTypes 'email' ) }}checked{{/if}}>
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Email
-                    </label>
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="birdSMS" value="sms" id="flexCheckChecked"
-                        {{#if (includes user.notificationSettings.bird.commTypes 'sms' ) }}checked{{/if}}>
-                    <label class="form-check-label" for="flexCheckChecked">
-                        SMS
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        <div class="row mb-4">
-          <h6>
-            <i class="fa fa-cat"></i> Cat Notifications
-          </h6>
-            <div class="col">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" name="enableCatNotifications" value="true"
-                        id="enableCatNotifications" role="swtich" {{#if user.notificationSettings.cat.receive
-                        }}checked{{/if}}>
-                    <label class="form-check-label" for="enableBirdNotifications">Enable</label>
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="catEmail" value="email" id="flexCheckDefault"
-                        {{#if (includes user.notificationSettings.cat.commTypes 'email' ) }}checked{{/if}}>
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Email
-                    </label>
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="catSMS" value="sms" id="flexCheckChecked"
-                        {{#if (includes user.notificationSettings.cat.commTypes 'sms' ) }}checked{{/if}}>
-                    <label class="form-check-label" for="flexCheckChecked">
-                        SMS
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        {{#if user.isAdmin}}
-        <div class="row mb-4">
-          <h6>
-            <i class="fa fa-sun"></i> Weather Notifications
-          </h6>
-            <div class="col">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" name="enableWeatherNotifications" value="true"
-                        id="enableWeatherNotifications" role="swtich" {{#if user.notificationSettings.weather.receive
-                        }}checked{{/if}}>
-                    <label class="form-check-label" for="enableBirdNotifications">Enable</label>
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="weatherEmail" value="email"
-                        id="flexCheckDefault" {{#if (includes user.notificationSettings.weather.commTypes 'email' )
-                        }}checked{{/if}}>
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Email
-                    </label>
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="weatherSMS" value="sms" id="flexCheckChecked"
-                        {{#if (includes user.notificationSettings.weather.commTypes 'sms' ) }}checked{{/if}}>
-                    <label class="form-check-label" for="flexCheckChecked">
-                        SMS
-                    </label>
-                </div>
-            </div>
-        </div>
-        <hr class="hr"/>
-        <h3 class="text-warning mt-3 mb-4">Device Settings</h3>
-
-        <div class="row mb-4">
-            <div class="col">
-                <div class="form-outline">
-                    <label class="form-label" for="feederLatitude"><i class="fa fa-location-dot"></i> Latitude</label>
-                    <input type="number" name="feederLatitude" placeholder="00.00" step=".000000000000001"
-                        value="{{user.feeder.latitude}}" class="form-control">
-
-                </div>
-            </div>
-            <div class="col">
-                <div class="form-outline">
-                    <label class="form-label" for="feederLongitude"><i class="fa fa-location-dot"></i> Longitude</label>
-                    <input type="number" name="feederLongitude" placeholder="00.00" step=".000000000000001"
-                        value="{{user.feeder.longitude}}" class="form-control">
-                </div>
-            </div>
-        </div>
-
-
-
-        {{/if}}
-            <button class="btn mt-4 mb-3 btn-primary" type="submit"><i class="pencil icon"></i>Submit</button>
-           
+  <div class="settings-actions"><button class="btn btn-primary" type="submit">Save changes</button></div>
 </form>

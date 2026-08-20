@@ -10,10 +10,10 @@ let contextData = {
 const dashboard = {
   index(request, response) {
     const user = account.getLoggedInUserOrRedirect(request, response);
-    contextData.firebaseAPIKey = process.env.FIREBASE_API_KEY;
-    contextData.firebaseId = process.env.FIREBASE_ID;
-    contextData.firebaseDatabase = process.env.FIREBASE_DATABASE;
-    contextData.firebaseAppId = process.env.FIREBASE_APP_ID;
+    contextData.firebaseAPIKey = process.env.FIREBASE_API_KEY || "";
+    contextData.firebaseId = process.env.FIREBASE_ID || "";
+    contextData.firebaseDatabase = process.env.FIREBASE_DATABASE || "";
+    contextData.firebaseAppId = process.env.FIREBASE_APP_ID || "";
     contextData.user = user;
     contextData.isAdmin = user.isAdmin;
     response.render("dash", contextData);
