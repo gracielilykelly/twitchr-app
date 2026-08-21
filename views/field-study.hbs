@@ -4,15 +4,23 @@
   <div><h1>Field study</h1><p>A record of the species observed at your feeder</p></div>
 </div>
 
-<section class="section-card field-study-summary">
-  <div class="field-study-summary-item"><span class="metric-label">Species observed</span><strong>{{species.length}}</strong></div>
-  <div class="field-study-summary-item"><span class="metric-label">Catalogue</span><strong>Birds</strong></div>
-  <div class="field-study-summary-item"><span class="metric-label">Updated</span><strong>20 Aug 2026</strong></div>
+<section class="field-study-overview">
+  <div class="metric-card field-study-overview-card"><div><div class="metric-label">Species observed</div><div class="metric-value">{{overview.speciesCount}}</div></div><i class="fa fa-crow metric-icon" aria-hidden="true"></i></div>
+  <div class="metric-card field-study-overview-card"><div><div class="metric-label">Total visits</div><div class="metric-value">{{overview.totalVisits}}</div></div><i class="fa fa-binoculars metric-icon" aria-hidden="true"></i></div>
+  <div class="metric-card field-study-overview-card"><div><div class="metric-label">Most frequent</div><div class="metric-value">{{overview.mostFrequent.commonName}}</div></div><i class="fa fa-crown metric-icon" aria-hidden="true"></i></div>
+  <div class="metric-card field-study-overview-card"><div><div class="metric-label">Latest discovery</div><div class="metric-value">{{overview.latestDiscovery.commonName}}</div></div><i class="fa fa-star metric-icon" aria-hidden="true"></i></div>
 </section>
 
-<section class="field-study-grid">
+<section class="section-card field-study-filters">
+  <div class="field-study-filter"><label class="metric-label" for="speciesSearch">Search</label><div class="field-study-search"><i class="fa fa-magnifying-glass" aria-hidden="true"></i><input id="speciesSearch" type="search" placeholder="Search species..."></div></div>
+  <div class="field-study-filter"><label class="metric-label" for="speciesFrequency">Frequency</label><select id="speciesFrequency" class="form-select"><option value="all">All visitors</option><option value="frequent">Frequent visitors</option></select></div>
+  <div class="field-study-filter"><label class="metric-label" for="speciesSort">Sort by</label><select id="speciesSort" class="form-select"><option value="name">Name</option><option value="sightings">Sightings</option><option value="lastSeen">Last seen</option></select></div>
+  <div class="field-study-filter"><label class="metric-label" for="speciesOrder">Order</label><select id="speciesOrder" class="form-select"><option value="ascending">Ascending</option><option value="descending">Descending</option></select></div>
+</section>
+
+<section class="field-study-grid" id="speciesGrid">
   {{#each species}}
-  <a class="species-card section-card" href="/field-study/{{slug}}">
+  <a class="species-card section-card" href="/field-study/{{slug}}" data-name="{{commonName}} {{scientificName}}" data-sightings="{{sightings}}" data-last-seen="{{lastSeen}}">
     <div class="species-card-image{{#unless image}} species-card-image-empty{{/unless}}">
       {{#if image}}<img src="{{image}}" alt="{{commonName}}">{{else}}<i class="fa fa-feather-pointed" aria-hidden="true"></i>{{/if}}
     </div>
@@ -25,3 +33,34 @@
   </a>
   {{/each}}
 </section>
+
+<script>
+const speciesGrid = document.getElementById("speciesGrid")
+const speciesCards = Array.from(speciesGrid.querySelectorAll(".species-card"))
+const speciesSearch = document.getElementById("speciesSearch")
+const speciesFrequency = document.getElementById("speciesFrequency")
+const speciesSort = document.getElementById("speciesSort")
+const speciesOrder = document.getElementById("speciesOrder")
+
+function updateSpeciesGrid() {
+  const search = speciesSearch.value.toLowerCase().trim()
+  const frequency = speciesFrequency.value
+  const sort = speciesSort.value
+  const descending = speciesOrder.value === "descending"
+  const filteredCards = speciesCards.filter((card) => {
+    const matchesSearch = card.dataset.name.toLowerCase().includes(search)
+    const matchesFrequency = frequency === "all" || Number(card.dataset.sightings) > 1
+    return matchesSearch && matchesFrequency
+  })
+  filteredCards.sort((first, second) => {
+    let firstValue = first.dataset[sort === "lastSeen" ? "lastSeen" : sort]
+    let secondValue = second.dataset[sort === "lastSeen" ? "lastSeen" : sort]
+    if (sort === "sightings") { firstValue = Number(firstValue); secondValue = Number(secondValue) }
+    return (firstValue > secondValue ? 1 : firstValue < secondValue ? -1 : 0) * (descending ? -1 : 1)
+  })
+  speciesCards.forEach((card) => card.remove())
+  filteredCards.forEach((card) => speciesGrid.appendChild(card))
+}
+
+[speciesSearch, speciesFrequency, speciesSort, speciesOrder].forEach((control) => control.addEventListener("input", updateSpeciesGrid))
+</script>

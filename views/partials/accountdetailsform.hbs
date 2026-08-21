@@ -11,6 +11,12 @@
   </section>
 
   <section class="section-card settings-section">
+    <h2>Appearance</h2>
+    <p>Choose how Twitchr looks on this device.</p>
+    <div class="settings-preference-row"><div><label for="themeToggle">Dark mode</label><span>Use a darker colour palette across the app.</span></div><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="themeToggle"><label class="visually-hidden" for="themeToggle">Enable dark mode</label></div></div>
+  </section>
+
+  <section class="section-card settings-section">
     <h2>Notification preferences</h2>
     <p>Choose which events to receive and how they should reach you.</p>
     <div class="notification-grid">
@@ -33,3 +39,12 @@
 
   <div class="settings-actions"><button class="btn btn-primary" type="submit">Save changes</button></div>
 </form>
+
+<script>
+const themeToggle = document.getElementById("themeToggle")
+themeToggle.checked = document.documentElement.dataset.theme === "dark"
+themeToggle.addEventListener("change", () => {
+  document.documentElement.dataset.theme = themeToggle.checked ? "dark" : "light"
+  localStorage.setItem("twitchr-theme", themeToggle.checked ? "dark" : "light")
+})
+</script>

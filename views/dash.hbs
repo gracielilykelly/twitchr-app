@@ -118,6 +118,8 @@ const firebaseAPIKey = {{{ toJson firebaseAPIKey }}}
 const firebaseDatabase = {{{ toJson firebaseDatabase }}}
 const firebaseId = {{{ toJson firebaseId }}}
 const firebaseAppId = {{{ toJson firebaseAppId }}}
+const chartAccent = document.documentElement.dataset.theme === "dark" ? "#6c8cff" : "#2d6970"
+const chartWarning = document.documentElement.dataset.theme === "dark" ? "#ffbc5e" : "#c77a52"
   
 // bootstrap tables
 let $birdTable = $('#birdTable')
@@ -353,12 +355,12 @@ birdsRef.once("value", function (snapshot) {
             datasets: [{
                 label: 'Bird Sightings',
                 data: [birdSightingsToday.length],
-                backgroundColor: '#80b1d3'
+                backgroundColor: chartAccent
             },
             {
                 label: 'Cat Sightings',
                 data: [catSightingsToday.length],
-                backgroundColor: '#fb8072'
+                backgroundColor: chartWarning
             }]
         };
         const barChartConfig = {

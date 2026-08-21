@@ -41,11 +41,13 @@
 
 <script>
 const journalActivity = {{{ toJson hourlyActivity }}}
+const journalAccent = document.documentElement.dataset.theme === "dark" ? "#6c8cff" : "#2d6970"
+const journalAccentFill = document.documentElement.dataset.theme === "dark" ? "rgba(108, 140, 255, .12)" : "rgba(45, 105, 112, .12)"
 const journalLabels = ["06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
 const journalData = journalActivity.slice(0, journalLabels.length)
 new Chart(document.getElementById("journalActivityChart").getContext("2d"), {
   type: "line",
-  data: { labels: journalLabels, datasets: [{ data: journalData, borderColor: "#2d6970", backgroundColor: "rgba(45, 105, 112, .12)", fill: true, tension: .35, pointBackgroundColor: "#2d6970", pointRadius: 3 }] },
+  data: { labels: journalLabels, datasets: [{ data: journalData, borderColor: journalAccent, backgroundColor: journalAccentFill, fill: true, tension: .35, pointBackgroundColor: journalAccent, pointRadius: 3 }] },
   options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: "#667477" } }, y: { beginAtZero: true, ticks: { precision: 0, color: "#667477" }, grid: { color: "#e5ebe9" } } } }
 })
 </script>

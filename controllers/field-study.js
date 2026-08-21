@@ -60,6 +60,12 @@ const species = [
 const contextData = {
   pageTitle: "Field study",
   species,
+  overview: {
+    speciesCount: species.length,
+    totalVisits: species.reduce((total, item) => total + item.sightings, 0),
+    mostFrequent: species.reduce((current, item) => item.sightings > current.sightings ? item : current, species[0]),
+    latestDiscovery: species[0],
+  },
 };
 
 const fieldStudy = {
