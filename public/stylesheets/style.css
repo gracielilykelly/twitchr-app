@@ -245,7 +245,7 @@ a { color: var(--accent); } a:hover { color: #1e5056; }
 
 .feed-stack { display: grid; gap: 28px; }
 .feed-hero-media { background: var(--accent-soft); }
-.feed-hero-media img, .feed-hero-media video { display: block; width: 100%; max-height: 560px; object-fit: contain; }
+.feed-hero-media img, .feed-hero-media video { display: block; width: 100%; height: clamp(200px, 32vw, 360px); object-fit: contain; }
 .feed-latest-caption { display: flex; justify-content: space-between; gap: 24px; padding: 24px; }
 .feed-latest-caption h2 { font-size: 28px; letter-spacing: -.02em; margin: 8px 0 3px; font-weight: 700; }
 .feed-scientific { color: var(--muted); font-size: 14px; font-style: italic; margin: 0; }
