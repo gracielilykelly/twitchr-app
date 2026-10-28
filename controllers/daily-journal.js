@@ -25,9 +25,11 @@ const getDays = (selectedDay, month, year, sightingData) => {
   const mondayOffset = (firstDay.getUTCDay() + 6) % 7;
   const days = Array.from({ length: mondayOffset }, () => ({ empty: true }));
   const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
+  const today = moment().tz("Europe/Dublin").format("YYYY-MM-DD");
   for (let number = 1; number <= daysInMonth; number += 1) {
     const daySightings = getDaySightings(number, month, year, sightingData);
-    days.push({ number, selected: number === selectedDay, active: daySightings.length > 0, birds: daySightings.some((sighting) => sighting.kind === "bird"), cats: daySightings.some((sighting) => sighting.kind === "cat") });
+    const date = `${year}-${String(month).padStart(2, "0")}-${String(number).padStart(2, "0")}`;
+    days.push({ number, label: getDateLabel(number, month, year), today: date === today, future: date > today, selected: number === selectedDay, active: daySightings.length > 0, birds: daySightings.some((sighting) => sighting.kind === "bird"), cats: daySightings.some((sighting) => sighting.kind === "cat") });
   }
   return days;
 };

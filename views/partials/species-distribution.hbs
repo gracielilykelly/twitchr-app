@@ -1,4 +1,9 @@
-{{#if hasData}}<svg class="species-distribution-svg" viewBox="0 0 640 {{height}}" role="img" aria-label="Species distribution: {{#each slices}}{{name}} {{percent}} percent. {{/each}}">
+{{#if hasData}}<div class="distribution-figure{{#if compact}} distribution-many{{/if}}"><svg class="species-distribution-svg" viewBox="0 0 640 {{height}}" role="img" aria-label="Species distribution: {{#each slices}}{{name}} {{percent}} percent. {{/each}}">
   {{#each slices}}<circle cx="320" cy="{{../cy}}" r="134" fill="none" stroke="{{color}}" stroke-width="48" stroke-dasharray="{{dash}}" stroke-dashoffset="{{offset}}" transform="rotate(-90 320 {{../cy}})"><title>{{name}}: {{count}} visits ({{percent}}%)</title></circle>{{/each}}
-  {{#each slices}}<path d="{{connector}}" fill="none" stroke="{{color}}" stroke-width="1.5"/><text x="{{labelX}}" y="{{labelTop}}" text-anchor="{{anchor}}" class="distribution-name">{{#each lines}}<tspan x="{{../labelX}}" dy="{{dy}}">{{text}}</tspan>{{/each}}</text><text x="{{labelX}}" y="{{percentY}}" text-anchor="{{anchor}}" class="distribution-percent">{{percent}}%</text>{{/each}}
-</svg>{{else}}<p class="section-body">No bird visits to compare.</p>{{/if}}
+  {{#each slices}}<path d="{{separator}}" class="distribution-separator"/>{{/each}}
+  <g class="distribution-callouts">{{#each slices}}<path d="{{connector}}" fill="none" stroke="{{color}}" stroke-width="1.5"/><text x="{{labelX}}" y="{{labelTop}}" text-anchor="{{anchor}}" class="distribution-name">{{#each lines}}<tspan x="{{../labelX}}" dy="{{dy}}">{{text}}</tspan>{{/each}}</text><text x="{{labelX}}" y="{{percentY}}" text-anchor="{{anchor}}" class="distribution-percent">{{percent}}%</text>{{/each}}</g>
+</svg>
+<svg class="distribution-compact" viewBox="140 {{compactY}} 360 360" role="img" aria-label="Species distribution">  {{#each slices}}<circle cx="320" cy="{{../cy}}" r="134" fill="none" stroke="{{color}}" stroke-width="48" stroke-dasharray="{{dash}}" stroke-dashoffset="{{offset}}" transform="rotate(-90 320 {{../cy}})"><title>{{name}}: {{count}} visits ({{percent}}%)</title></circle>{{/each}}
+  {{#each slices}}<path d="{{separator}}" class="distribution-separator"/>{{/each}}
+</svg>
+<ul class="distribution-legend">{{#each slices}}<li><span class="distribution-swatch" style="background:{{color}}" aria-hidden="true"></span><span>{{name}}</span><span class="distribution-value">{{percent}}%</span></li>{{/each}}</ul></div>{{else}}<p class="section-body">No bird visits to compare.</p>{{/if}}
