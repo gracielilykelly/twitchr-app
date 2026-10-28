@@ -1,27 +1,21 @@
 "use strict";
 const mqtt = require("mqtt");
-const logger = require("../utils/logger");
-
-// MQTT Config
-const options = {
-  host: process.env.MQTT_HOST,
-  port: 8883,
-  protocol: "mqtts",
-  username: process.env.MQTT_USERNAME,
-  password: process.env.MQTT_PASSWORD,
-};
-
-const mqttPublish = {
-  publishMsg(msg) {
-    logger.info("sending message to mqtt....");
-    const client = mqtt.connect(options);
-    // publish message to MQTT
-    client.publish("twitchr", msg, { qos: 2, retain: false }, (error) => {
-      if (error) {
-        logger.info(error);
-      }
+module.exports = {
+  publishMsg(message) {
+    if (!process.env.MQTT_HOST || !process.env.MQTT_USERNAME || !process.env.MQTT_PASSWORD) return Promise.reject(new Error("MQTT is not configured."));
+    return new Promise((resolve, reject) => {
+      const client = mqtt.connect({ host: process.env.MQTT_HOST, port: Number(process.env.MQTT_PORT || 8883), protocol: "mqtts", username: process.env.MQTT_USERNAME, password: process.env.MQTT_PASSWORD, reconnectPeriod: 0, connectTimeout: 10000 });
+      let finished = false;
+      const finish = (error) => {
+        if (finished) return;
+        finished = true;
+        clearTimeout(timeout);
+        if (error) { client.end(true); reject(error); }
+        else client.end(false, {}, resolve);
+      };
+      const timeout = setTimeout(() => finish(new Error("MQTT publish timed out.")), 12000);
+      client.once("error", finish);
+      client.once("connect", () => client.publish(process.env.MQTT_TOPIC || "twitchr", message, { qos: 2, retain: false }, finish));
     });
   },
 };
-
-module.exports = mqttPublish;

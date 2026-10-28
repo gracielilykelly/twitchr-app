@@ -34,6 +34,8 @@
   {{/each}}
 </section>
 
+<nav class="species-pagination" id="speciesPagination" aria-label="Field study pages"><button class="btn btn-outline-secondary" id="speciesPrevious" type="button">Previous</button><span id="speciesPageLabel"></span><button class="btn btn-outline-secondary" id="speciesNext" type="button">Next</button></nav>
+
 <script>
 const speciesGrid = document.getElementById("speciesGrid")
 const speciesCards = Array.from(speciesGrid.querySelectorAll(".species-card"))
@@ -41,6 +43,11 @@ const speciesSearch = document.getElementById("speciesSearch")
 const speciesFrequency = document.getElementById("speciesFrequency")
 const speciesSort = document.getElementById("speciesSort")
 const speciesOrder = document.getElementById("speciesOrder")
+const speciesPrevious = document.getElementById("speciesPrevious")
+const speciesNext = document.getElementById("speciesNext")
+const speciesPageLabel = document.getElementById("speciesPageLabel")
+const speciesPageSize = 9
+let speciesPage = 1
 
 function updateSpeciesGrid() {
   const search = speciesSearch.value.toLowerCase().trim()
@@ -58,9 +65,18 @@ function updateSpeciesGrid() {
     if (sort === "sightings") { firstValue = Number(firstValue); secondValue = Number(secondValue) }
     return (firstValue > secondValue ? 1 : firstValue < secondValue ? -1 : 0) * (descending ? -1 : 1)
   })
+  const pageCount = Math.max(1, Math.ceil(filteredCards.length / speciesPageSize))
+  speciesPage = Math.min(speciesPage, pageCount)
+  const pageStart = (speciesPage - 1) * speciesPageSize
   speciesCards.forEach((card) => card.remove())
-  filteredCards.forEach((card) => speciesGrid.appendChild(card))
+  filteredCards.slice(pageStart, pageStart + speciesPageSize).forEach((card) => speciesGrid.appendChild(card))
+  speciesPrevious.disabled = speciesPage === 1
+  speciesNext.disabled = speciesPage === pageCount
+  speciesPageLabel.textContent = `Page ${speciesPage} of ${pageCount}`
 }
 
-[speciesSearch, speciesFrequency, speciesSort, speciesOrder].forEach((control) => control.addEventListener("input", updateSpeciesGrid))
+[speciesSearch, speciesFrequency, speciesSort, speciesOrder].forEach((control) => control.addEventListener("input", () => { speciesPage = 1; updateSpeciesGrid() }))
+speciesPrevious.addEventListener("click", () => { if (speciesPage > 1) { speciesPage -= 1; updateSpeciesGrid() } })
+speciesNext.addEventListener("click", () => { speciesPage += 1; updateSpeciesGrid() })
+updateSpeciesGrid()
 </script>

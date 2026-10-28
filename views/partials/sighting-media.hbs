@@ -1,0 +1,4 @@
+{{#if url}}
+  {{#if isVideo}}<video controls playsinline preload="none" aria-label="{{name}} sighting"><source src="{{url}}"><a href="{{url}}">Open video</a></video>
+  {{else}}<img src="{{url}}" alt="{{name}} at the feeder" loading="lazy">{{/if}}
+{{else}}<div class="feed-no-media">No media recorded</div>{{/if}}

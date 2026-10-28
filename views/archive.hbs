@@ -1,0 +1,29 @@
+{{> menu id="archive"}}
+<div class="page-heading"><div><h1>Archive</h1><p>Explore the moments captured at your feeder.</p></div><div class="updated-label">Europe/Dublin</div></div>
+<form method="get" action="/archive" class="section-card archive-filters">
+  
+  <div><label class="metric-label" for="archive-species">Species</label><select class="form-select" id="archive-species" name="species">{{#each speciesOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+  <div><label class="metric-label" for="archive-kind">Detection type</label><select class="form-select" id="archive-kind" name="kind">{{#each kindOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+  <div><label class="metric-label" for="archive-date">Date</label><input class="form-control" id="archive-date" name="date" type="date" value="{{date}}"></div>
+  <div><label class="metric-label" for="archive-media">Media</label><select class="form-select" id="archive-media" name="media">{{#each mediaOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+  <div><label class="metric-label" for="archive-sort">Sort by</label><select class="form-select" id="archive-sort" name="sort">{{#each sortOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+  <div><label class="metric-label" for="archive-order">Order</label><select class="form-select" id="archive-order" name="order">{{#each orderOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+  <div><label class="metric-label" for="archive-size">Results</label><select class="form-select" id="archive-size" name="size">{{#each sizeOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select></div>
+  <div class="archive-actions"><button class="btn btn-primary" type="submit">Apply filters</button><a class="btn btn-outline-secondary" href="{{resetUrl}}">Reset</a></div>
+</form>
+{{#if loadError}}<div class="section-card section-body archive-empty" role="alert"><h2>Unable to load the archive</h2><p>Please try again in a moment.</p></div>{{else}}
+<div class="archive-grid">
+{{#each sightings}}
+  <article class="section-card archive-card">
+    <div class="archive-media">
+      <span class="archive-badge {{#if (eq kind 'cat')}}archive-badge-cat{{/if}}"><i class="fa {{#if (eq kind 'cat')}}fa-cat{{else}}fa-crow{{/if}}" aria-hidden="true"></i> {{#if (eq kind 'cat')}}Cat{{else}}Bird{{/if}}</span>
+      {{#if url}}{{#if isVideo}}<video controls preload="none" playsinline aria-label="{{species}} sighting on {{dateLabel}} at {{timeLabel}}"><source src="{{url}}"><a href="{{url}}">Open video</a></video>{{else}}<a class="archive-image-link" href="{{url}}" target="_blank" rel="noopener noreferrer" aria-label="Open image of {{species}} on {{dateLabel}} at {{timeLabel}}"><img src="{{url}}" alt="{{species}} sighting" loading="lazy"></a>{{/if}}{{else}}<div class="archive-no-media"><i class="fa fa-image" aria-hidden="true"></i><span>No media recorded</span></div>{{/if}}
+    </div>
+    <div class="archive-card-body"><div class="archive-card-heading"><div><h2>{{species}}</h2><span class="metric-label">{{mediaLabel}}{{#if isVideo}}{{#if durationSeconds}} · {{durationSeconds}} sec{{/if}}{{/if}}</span></div>{{#if url}}<a class="archive-open" href="{{url}}" target="_blank" rel="noopener noreferrer" aria-label="Open original media for {{species}}"><i class="fa fa-arrow-up-right-from-square" aria-hidden="true"></i></a>{{/if}}</div>
+    <dl class="archive-meta"><div><dt>Date</dt><dd>{{dateLabel}}</dd></div><div><dt>Time</dt><dd>{{timeLabel}}</dd></div><div><dt>Confidence</dt><dd>{{confidenceLabel}}</dd></div></dl></div>
+  </article>
+{{else}}<div class="section-card section-body archive-empty"><i class="fa fa-film" aria-hidden="true"></i><h2>No sightings found</h2><p>Try changing your filters or choosing another date.</p><a class="btn btn-outline-secondary" href="{{resetUrl}}">Clear filters</a></div>{{/each}}
+</div>
+<div class="archive-footer"><p>Showing {{from}}–{{to}} of {{total}} sightings</p><nav aria-label="Archive pagination"><ul class="archive-pagination"><li>{{#if previous}}<a href="{{previous}}" aria-label="Previous page">‹</a>{{else}}<span aria-disabled="true" aria-label="Previous page">‹</span>{{/if}}</li>{{#each pages}}{{#if gap}}<li><span>…</span></li>{{/if}}<li><a href="{{url}}" {{#if active}}class="active" aria-current="page"{{/if}} aria-label="Page {{number}}">{{number}}</a></li>{{/each}}<li>{{#if next}}<a href="{{next}}" aria-label="Next page">›</a>{{else}}<span aria-disabled="true" aria-label="Next page">›</span>{{/if}}</li></ul></nav></div>
+{{/if}}
+<script src="/js/archive.js"></script>

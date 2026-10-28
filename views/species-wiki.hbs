@@ -1,26 +1,21 @@
 {{> menu id="field-study" isAuthUser=true}}
-
-<div class="page-heading">
-  <div><a class="back-link" href="/field-study"><i class="fa fa-arrow-left" aria-hidden="true"></i> Field study</a><h1>{{species.commonName}}</h1><p><em>{{species.scientificName}}</em></p></div>
-</div>
-
-<div class="species-wiki-layout">
+<a class="btn btn-outline-secondary species-entry-back" href="/field-study"><i class="fa fa-arrow-left" aria-hidden="true"></i> Field study</a>
+<div class="page-heading species-entry-heading"><div><h1>{{species.commonName}}</h1>{{#if species.scientificName}}<p><em>{{species.scientificName}}</em></p>{{/if}}</div></div>
+<div class="species-wiki-layout species-entry-layout">
   <aside class="species-wiki-sidebar">
-    <div class="section-card species-wiki-image{{#unless species.image}} species-card-image-empty{{/unless}}">
-      {{#if species.image}}<img src="{{species.image}}" alt="{{species.commonName}}">{{else}}<i class="fa fa-feather-pointed" aria-hidden="true"></i>{{/if}}
-    </div>
-    <div class="section-card species-facts">
-      <div><span class="metric-label">Sightings</span><strong>{{species.sightings}}</strong></div>
-      <div><span class="metric-label">Last seen</span><strong>{{species.lastSeen}}</strong></div>
-    </div>
+    <div class="section-card species-entry-portrait {{#unless species.image}}species-card-image-empty{{/unless}}">{{#if species.image}}<img src="{{species.image}}" alt="{{species.commonName}}">{{else}}<i class="fa fa-feather-pointed" aria-hidden="true"></i>{{/if}}</div>
+    <section class="section-card species-observation-log"><div class="section-header"><h2><i class="fa fa-binoculars" aria-hidden="true"></i> Observation log</h2></div><div class="section-body">
+      <dl class="species-observation-facts"><div><dt class="metric-label">Total spotted</dt><dd>{{observations.total}} <i class="fa fa-eye" aria-hidden="true"></i></dd></div><div><dt class="metric-label">Last spotted</dt><dd>{{observations.lastSeen}} <i class="fa fa-calendar" aria-hidden="true"></i></dd></div></dl>
+      <div class="species-recent-captures"><h3 class="metric-label"><i class="fa fa-camera" aria-hidden="true"></i> Recent captures</h3>{{#each observations.recentCaptures}}<figure class="species-capture"><div class="species-capture-media">{{> sighting-media}}</div><figcaption>{{dateLabel}} · {{timeLabel}}</figcaption></figure>{{else}}<p class="species-entry-empty">No captures recorded for this species yet.</p>{{/each}}<a class="species-capture-link" href="{{observations.archiveUrl}}">View all sightings <span aria-hidden="true">›</span></a></div>
+    </div></section>
+    {{#if species.audio}}<section class="section-card species-audio"><span class="metric-label">Birdsong</span><audio controls preload="none" src="{{species.audio}}"></audio></section>{{/if}}
   </aside>
-
   <main class="species-wiki-content">
-    <section class="section-card species-wiki-intro"><span class="wiki-initial">{{species.initial}}</span><p>{{species.description}}</p></section>
+    <section class="section-card species-wiki-intro species-entry-intro"><span class="wiki-initial" aria-hidden="true">{{species.initial}}</span><p><span class="visually-hidden">{{species.initial}}</span>{{species.descriptionBody}}</p></section>
     <div class="species-wiki-columns">
-      <section class="section-card species-wiki-section"><h2><i class="fa fa-location-dot" aria-hidden="true"></i> Habitat</h2><p>{{species.habitat}}</p></section>
-      <section class="section-card species-wiki-section"><h2><i class="fa fa-seedling" aria-hidden="true"></i> Diet</h2><p>{{species.diet}}</p></section>
+      <section class="section-card species-wiki-section"><h2><i class="fa fa-location-dot" aria-hidden="true"></i> Habitat</h2><p>{{species.habitat}}</p>{{#if species.habitatEnvironments.length}}<span class="metric-label species-tag-label">Environments</span><div class="species-tag-list">{{#each species.habitatEnvironments}}<span>{{this}}</span>{{/each}}</div>{{/if}}{{#if species.nestingSites.length}}<span class="metric-label species-tag-label">Nesting sites</span><div class="species-tag-list">{{#each species.nestingSites}}<span>{{this}}</span>{{/each}}</div>{{/if}}</section>
+      <section class="section-card species-wiki-section"><h2><i class="fa fa-seedling" aria-hidden="true"></i> Diet</h2>{{#if species.dietType}}<span class="species-detail-label">{{species.dietType}}</span>{{/if}}<p>{{species.diet}}</p>{{#if species.foods.length}}<span class="metric-label species-tag-label">Foods observed</span><div class="species-tag-list">{{#each species.foods}}<span>{{this}}</span>{{/each}}</div>{{/if}}</section>
     </div>
-    <section class="section-card species-wiki-section"><h2><i class="fa fa-binoculars" aria-hidden="true"></i> Behaviour</h2><p>{{species.behaviour}}</p></section>
+    <section class="section-card species-wiki-section"><h2><i class="fa fa-feather-pointed" aria-hidden="true"></i> Behaviour</h2><div class="species-behaviour-grid">{{#each behaviourNotes}}<div><h3 class="metric-label">{{label}}</h3><p>{{note}}</p></div>{{/each}}</div></section>
   </main>
 </div>

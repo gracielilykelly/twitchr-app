@@ -1,13 +1,8 @@
 "use strict";
 
-const mailgun = require("mailgun-js");
 const moment = require("moment-timezone");
 const nodemailer = require("nodemailer");
 const twilio = require("twilio");
-const _ = require("lodash");
-const userStore = require("../models/user-store.js");
-const logger = require("../utils/logger");
-const commsUtils = require("../utils/comms");
 
 
 const comms = {
@@ -24,7 +19,7 @@ const comms = {
   let msg = "";
     // craft message based on type
   if (updateData.type == "bird") {
-    let birdSpecies = updateData.species;
+    let birdSpecies = typeof updateData.species === "string" ? updateData.species : "Unknown";
     if(birdSpecies == "Unknown"){
       msg = msgMap.unknownBird
     } else {
@@ -43,68 +38,30 @@ const comms = {
 }, 
   
   async sendComms(updateData, users) {
-    // send communications
-    const currentHour = parseInt(moment().tz("Europe/Dublin").format("HH"));
-    // only send comms between 7am and 10pm
-    if(currentHour > 7 && currentHour < 22){
-    let msg = this._craftMsg(updateData);
-    let emailRecipients = [];
-    let SMSRecipients = [];
-    
-    
-    logger.info(msg);
-    // get Email and SMS Recipients
-    users.forEach((user) => {
-      let commSettings = user.notificationSettings[updateData.type];
-      if (commSettings.receive === 'true') {
-        if (commSettings.commTypes.includes("email")) {
-          emailRecipients.push(user.email);
-        }
-        if (commSettings.commTypes.includes("sms")) {
-          SMSRecipients.push(user.phoneNumber);
-        }
-      }
-    });
-
-    // send SMS to recipients
-    if (SMSRecipients.length) {
-      const accountSid = process.env.TWILIO_ACCOUNT_SID;
-      const authToken = process.env.TWILIO_AUTH_TOKEN;
-      const client = require("twilio")(accountSid, authToken);
-      logger.info("sending SMS to recipients")
-      SMSRecipients.forEach((SMSRecipient) => {
-        client.messages.create({
-          body: msg,
-          from: "+18563867287",
-          to: SMSRecipient,
-        });
-      });
+    const currentHour = moment().tz("Europe/Dublin").hour();
+    if (currentHour < 7 || currentHour >= 22) return;
+    const message = this._craftMsg(updateData);
+    const emailRecipients = [], smsRecipients = [];
+    for (const user of users) {
+      const settings = user.notificationSettings?.[updateData.type];
+      if (settings?.receive !== true && settings?.receive !== "true") continue;
+      if (settings.commTypes?.includes("email") && user.email) emailRecipients.push(user.email);
+      if (settings.commTypes?.includes("sms") && user.phoneNumber) smsRecipients.push(user.phoneNumber);
     }
-
-    // send email to recipients
+    if (smsRecipients.length && (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN || !process.env.TWILIO_FROM_NUMBER)) throw new Error("SMS notifications are not configured.");
+    if (emailRecipients.length && (!process.env.MAILGUN_DOMAIN || !process.env.MAILGUN_SMTP_PASS)) throw new Error("Email notifications are not configured.");
+    const jobs = [];
+    if (smsRecipients.length) {
+      const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN, { timeout: 10000, autoRetry: false });
+      for (const to of smsRecipients) jobs.push(client.messages.create({ body: message, from: process.env.TWILIO_FROM_NUMBER, to }));
+    }
     if (emailRecipients.length) {
-      logger.info("sending email to recipients");
-      let subjectLine = ["bird", "cat"].includes(updateData.type)
-        ? updateData.type.charAt(0).toUpperCase() + updateData.type.slice(1) + " Spotted!"
-        : "Weather Update";
-      let transporter = nodemailer.createTransport({
-        host: "smtp.mailgun.org",
-        port: 587,
-        auth: {
-          user: "postmaster@" + process.env.MAILGUN_DOMAIN,
-          pass: process.env.MAILGUN_SMTP_PASS,
-        },
-      });
-
-      let info = await transporter.sendMail({
-        from: `<twitchrapp@${process.env.MAILGUN_DOMAIN}`,
-        to: emailRecipients,
-        subject: subjectLine,
-        text: msg,
-      });
+      const transport = nodemailer.createTransport({ host: "smtp.mailgun.org", port: 587, connectionTimeout: 10000, greetingTimeout: 10000, socketTimeout: 15000, auth: { user: `postmaster@${process.env.MAILGUN_DOMAIN}`, pass: process.env.MAILGUN_SMTP_PASS } });
+      jobs.push(transport.sendMail({ from: `Twitchr <twitchrapp@${process.env.MAILGUN_DOMAIN}>`, bcc: emailRecipients, subject: ["bird", "cat"].includes(updateData.type) ? `${updateData.type === "bird" ? "Bird" : "Cat"} spotted!` : "Weather update", text: message }));
     }
-  }
-  }
-}
-
+    // Wait for every provider call even when another provider fails.
+    const results = await Promise.allSettled(jobs);
+    if (results.some(result => result.status === "rejected")) throw new Error("One or more notifications could not be delivered.");
+  },
+};
 module.exports = comms;

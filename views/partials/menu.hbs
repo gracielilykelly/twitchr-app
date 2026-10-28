@@ -21,10 +21,16 @@
             <a class="nav-link {{#if (eq id 'dashboard')}}active{{/if}}" aria-current="page" href="/">Dashboard</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link {{#if (eq id 'daily-journal')}}active{{/if}}" href="/daily-journal">Daily journal</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{#if (eq id 'feeder-insights')}}active{{/if}}" href="/feeder-insights">Feeder insights</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link {{#if (eq id 'field-study')}}active{{/if}}" href="/field-study">Field study</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {{#if (eq id 'daily-journal')}}active{{/if}}" href="/daily-journal">Daily journal</a>
+            <a class="nav-link {{#if (eq id 'archive')}}active{{/if}}" href="/archive">Archive</a>
           </li>
           <li class="nav-item dropdown">
             <a
@@ -39,7 +45,7 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="/users/{{user.id}}">Settings</a></li>
-              <li><a class="dropdown-item" href="/logout">Log out</a></li>
+              <li><form method="post" action="/logout"><input type="hidden" name="_csrf" value="{{csrfToken}}"><button type="submit" class="dropdown-item">Log out</button></form></li>
             </ul>
           </li>
 

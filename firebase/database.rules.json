@@ -1,0 +1,9 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "bird_sightings": { ".read": "auth != null && root.child('web_users').child(auth.uid).val() === true" },
+    "cat_sightings": { ".read": "auth != null && root.child('web_users').child(auth.uid).val() === true" },
+    "real_time": { ".read": "auth != null && root.child('web_users').child(auth.uid).val() === true" }
+  }
+}

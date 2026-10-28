@@ -1,0 +1,4 @@
+{{#if hasData}}<svg class="species-distribution-svg" viewBox="0 0 640 {{height}}" role="img" aria-label="Species distribution: {{#each slices}}{{name}} {{percent}} percent. {{/each}}">
+  {{#each slices}}<circle cx="320" cy="{{../cy}}" r="134" fill="none" stroke="{{color}}" stroke-width="48" stroke-dasharray="{{dash}}" stroke-dashoffset="{{offset}}" transform="rotate(-90 320 {{../cy}})"><title>{{name}}: {{count}} visits ({{percent}}%)</title></circle>{{/each}}
+  {{#each slices}}<path d="{{connector}}" fill="none" stroke="{{color}}" stroke-width="1.5"/><text x="{{labelX}}" y="{{labelTop}}" text-anchor="{{anchor}}" class="distribution-name">{{#each lines}}<tspan x="{{../labelX}}" dy="{{dy}}">{{text}}</tspan>{{/each}}</text><text x="{{labelX}}" y="{{percentY}}" text-anchor="{{anchor}}" class="distribution-percent">{{percent}}%</text>{{/each}}
+</svg>{{else}}<p class="section-body">No bird visits to compare.</p>{{/if}}

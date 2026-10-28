@@ -1,0 +1,11 @@
+.env
+.env.*
+node_modules/
+.DS_Store
+models/user-store.json
+.vercel/
+.local/
+*twitchr-account-profiles*.sql
+*.log
+serviceAccountKey*.json
+*-firebase-adminsdk-*.json

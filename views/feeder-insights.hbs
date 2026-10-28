@@ -1,0 +1,24 @@
+{{> menu id="feeder-insights"}}
+<div class="page-heading">
+  <div><h1>Feeder insights</h1><p>Discover the patterns around your feeder.</p></div>
+  <form method="get" class="insights-range"><label for="insights-range" class="metric-label">Date range</label><div><select class="form-select" id="insights-range" name="range"><option value="7" {{#if (eq range '7')}}selected{{/if}}>Last 7 days</option><option value="30" {{#if (eq range '30')}}selected{{/if}}>Last 30 days</option><option value="all" {{#if (eq range 'all')}}selected{{/if}}>All available data</option></select><button class="btn btn-primary">Apply</button></div></form>
+</div>
+<p class="insights-period">{{dateLabel}} · Europe/Dublin</p>
+{{#unless hasData}}<div class="section-card section-body insights-empty" role="status">No sightings available for this period. Try a different date range.</div>{{/unless}}
+<div class="metric-grid">
+  <div class="metric-card"><div><div class="metric-label">Total bird visits</div><div class="metric-value">{{summary.birds}}</div></div><i class="fa fa-crow metric-icon" aria-hidden="true"></i></div>
+  <div class="metric-card"><div><div class="metric-label">Species observed</div><div class="metric-value">{{summary.species}}</div></div><i class="fa fa-feather-pointed metric-icon" aria-hidden="true"></i></div>
+  <div class="metric-card"><div><div class="metric-label">Most active hour</div><div class="metric-value">{{summary.peak}}</div></div><i class="fa fa-clock metric-icon" aria-hidden="true"></i></div>
+  <div class="metric-card"><div><div class="metric-label">Cat detections</div><div class="metric-value insights-cat">{{summary.cats}}</div></div><i class="fa fa-cat metric-icon insights-cat" aria-hidden="true"></i></div>
+</div>
+<div class="insights-stack">
+  <section class="section-card"><div class="section-header"><h2>Bird activity over time</h2><p>Bird visits by hour of day, across the selected period.</p></div><div class="section-body insights-chart"><canvas id="insights-birds" role="img" aria-label="Hourly bird visits"></canvas></div></section>
+  <section class="section-card"><div class="section-header"><h2>Weekly distribution</h2><p>Total bird visits by weekday. Bar lengths are relative to the busiest day.</p></div><div class="section-body insights-weekly">{{#each weekly}}<div><span>{{name}}</span><div class="insights-track"><span style="width: {{width}}%"></span></div><strong>{{count}}<span class="visually-hidden"> visits</span></strong></div>{{/each}}</div></section>
+  <div class="insights-species-grid">
+    <section class="section-card"><div class="section-header"><h2>Top species</h2><p>Your five most frequent visitors.</p></div><div class="section-body">{{#each topSpecies}}<div class="insights-species-row"><span class="insights-feather"><i class="fa fa-feather-pointed" aria-hidden="true"></i></span><div><strong>{{name}}</strong><small>{{percent}}% of bird visits</small></div><strong>{{count}}</strong></div>{{else}}<p class="insights-empty">No bird species recorded in this period.</p>{{/each}}</div></section>
+    <section class="section-card"><div class="section-header"><h2>Species distribution</h2><p>Share of visits across all recorded species.</p></div><div class="section-body distribution-chart">{{> species-distribution distribution}}</div></section>
+  </div>
+  <section class="section-card"><div class="section-header"><h2>Cat insights</h2><p>Patterns in cat activity around your feeder.</p></div><div class="section-body"><div class="insights-cat-grid"><div><span class="metric-label">Average detections / day</span><strong>{{averageCats}}</strong><small>Across every day in this period</small></div><div><span class="metric-label">Average duration</span><strong>{{averageDuration}}</strong><small>{{durationCoverage}}</small></div><div><span class="metric-label">Peak hour</span><strong>{{catPeak}}</strong><small>Hour with the most detections</small></div></div><h3 class="insights-subheading">Cat activity over time</h3><p class="insights-caption">Cat detections by hour of day, across the selected period.</p><div class="insights-chart"><canvas id="insights-cats" role="img" aria-label="Hourly cat detections"></canvas></div></div></section>
+</div>
+<script id="insights-data" type="application/json">{{{chartData}}}</script>
+<script src="/js/feeder-insights.js"></script>

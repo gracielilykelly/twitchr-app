@@ -1,7 +1,8 @@
 <form action="{{postUrl}}" method="POST">
+  <input type="hidden" name="_csrf" value="{{csrfToken}}">
   <section class="section-card settings-section">
     <h2>Profile</h2>
-    <p>Contact details used for account access and notifications.</p>
+    <p>Contact details used for account access and notifications. Email changes require confirmation before your login address changes.</p>
     <div class="row g-3">
       <div class="col-md-6"><label class="form-label" for="firstname">First name</label><input id="firstname" name="firstName" required type="text" value="{{user.firstName}}" class="form-control"></div>
       <div class="col-md-6"><label class="form-label" for="lastname">Last name</label><input id="lastname" name="lastName" required type="text" value="{{user.lastName}}" class="form-control"></div>
