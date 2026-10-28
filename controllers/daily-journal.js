@@ -2,7 +2,7 @@
 
 const moment = require("moment-timezone");
 const account = require("./account.js");
-const { getSightings } = require("../utils/firebase-sightings.js");
+const { getSightings } = require("../utils/local-data");
 
 const getDateLabel = (day, month, year) => new Date(Date.UTC(year, month - 1, day)).toLocaleDateString("en-IE", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
 
@@ -75,15 +75,15 @@ const dailyJournal = {
     if (!user) return;
     const requestedMonth = Number.parseInt(request.query.month, 10);
     const requestedYear = Number.parseInt(request.query.year, 10);
-    const now = moment().tz("Europe/Dublin");
-    const earliestYear = now.year() - 2;
-    const month = requestedMonth >= 1 && requestedMonth <= 12 ? requestedMonth : now.month() + 1;
-    const year = requestedYear >= earliestYear && requestedYear <= now.year() ? requestedYear : now.year();
+    const now = moment().tz("Europe/Dublin").toDate();
+    const earliestYear = now.getFullYear() - 2;
+    const month = requestedMonth >= 1 && requestedMonth <= 12 ? requestedMonth : now.getMonth() + 1;
+    const year = requestedYear >= earliestYear && requestedYear <= now.getFullYear() ? requestedYear : now.getFullYear();
     const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
     const requestedDay = Number.parseInt(request.query.day, 10);
-    const defaultDay = month === now.month() + 1 && year === now.year() ? now.date() : 1;
+    const defaultDay = month === now.getMonth() + 1 && year === now.getFullYear() ? now.getDate() : 1;
     const selectedDay = requestedDay >= 1 && requestedDay <= daysInMonth ? requestedDay : defaultDay;
-    const sightingData = await getSightings({ token: request.accessToken });
+    const sightingData = await getSightings();
     response.render("daily-journal", { ...buildContext(selectedDay, month, year, sightingData), user });
   },
 };

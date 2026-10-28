@@ -7,5 +7,3 @@ models/user-store.json
 .local/
 *twitchr-account-profiles*.sql
 *.log
-serviceAccountKey*.json
-*-firebase-adminsdk-*.json

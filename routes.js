@@ -10,10 +10,10 @@ const fieldStudy = require("./controllers/field-study.js");
 const dailyJournal = require("./controllers/daily-journal.js");
 
 // App
-router.get("/media", handle(require("./controllers/media").get));
 router.get("/", handle(dashboard.index));
 router.get("/login", handle(account.login));
 router.post("/authenticate", handle(account.authenticate));
+router.get("/logout", handle(account.logout));
 router.post("/logout", handle(account.logout));
 router.get("/users/:id", handle(account.edit));
 router.post("/users/:id/save-details", handle(account.saveDetails));

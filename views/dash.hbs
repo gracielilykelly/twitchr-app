@@ -1,5 +1,5 @@
 {{> menu id="dashboard" isAuthUser=true}}
-<div class="page-heading"><div><h1>Today's feed</h1><p>Activity and moments from your feeder</p></div><div class="updated-label">{{#if latest}}Latest update {{latest.timeLabel}} · {{latest.dateLabel}}{{else}}No sightings yet{{/if}}/div></div>
+<div class="page-heading"><div><h1>Today's feed</h1><p>Activity and moments from your feeder</p></div><div class="updated-label">{{#if latest}}Latest update {{latest.timeLabel}} · {{latest.dateLabel}}{{else}}No sightings yet{{/if}}</div></div>
 <div class="metric-grid" id="statusPanel">
   <div class="metric-card"><div><div class="metric-label">Current status</div><div class="metric-value {{dashboardStats.statusClass}}">{{dashboardStats.status}}</div></div><i class="fa fa-eye metric-icon" aria-hidden="true"></i></div>
   <div class="metric-card"><div><div class="metric-label">Visits today</div><div class="metric-value">{{dashboardStats.visits}}</div></div><i class="fa fa-crow metric-icon" aria-hidden="true"></i></div>

@@ -10,9 +10,7 @@ module.exports = (request, response, next) => {
     response.cookie(cookieName, token, session.options());
   }
   response.locals.csrfToken = token;
-  // Machine API callers use a separately validated API key rather than cookies.
-  const machine = request.path.startsWith("/api/") && request.get("x-api-key");
-  if (!["GET", "HEAD", "OPTIONS"].includes(request.method) && !machine) {
+  if (!["GET", "HEAD", "OPTIONS"].includes(request.method)) {
     const supplied = request.get("x-csrf-token") || request.body?._csrf;
     if (!valid(supplied) || !timingSafeEqual(Buffer.from(token), Buffer.from(supplied))) {
       return response.status(403).send("Your form has expired. Refresh the page and try again.");

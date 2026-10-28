@@ -3,7 +3,7 @@ const moment = require("moment-timezone");
 const ZONE = "Europe/Dublin";
 const safeUrl = (value) => {
   if (typeof value !== "string") return "";
-  if (/^\/media\?path=[A-Za-z0-9%._~!*'()-]+&kind=(image|video)$/.test(value)) return value;
+  if (/^\/captures\/[a-z0-9._-]+$/i.test(value)) return value;
   try { const url = new URL(value); return ["http:", "https:"].includes(url.protocol) && !url.username && !url.password ? value : ""; } catch (_) { return ""; }
 };
 const buildArchive = (rows, query = {}) => {

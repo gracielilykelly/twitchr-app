@@ -9,6 +9,3 @@ docs/
 .local/
 *twitchr-account-profiles*.sql
 *.log
-firebase/
-serviceAccountKey*.json
-*-firebase-adminsdk-*.json
