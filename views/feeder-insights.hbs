@@ -3,7 +3,7 @@
   <div><h1>Feeder insights</h1><p>Discover the patterns around your feeder.</p></div>
   <form method="get" class="insights-range"><label for="insights-range" class="metric-label">Date range</label><div><select class="form-select" id="insights-range" name="range"><option value="7" {{#if (eq range '7')}}selected{{/if}}>Last 7 days</option><option value="30" {{#if (eq range '30')}}selected{{/if}}>Last 30 days</option><option value="all" {{#if (eq range 'all')}}selected{{/if}}>All available data</option></select><button class="btn btn-primary">Apply</button></div></form>
 </div>
-<p class="insights-period">{{dateLabel}} · Europe/Dublin</p>
+<p class="insights-period">{{dateLabel}}</p>
 {{#unless hasData}}<div class="section-card section-body insights-empty" role="status">No sightings available for this period. Try a different date range.</div>{{/unless}}
 <div class="metric-grid">
   <div class="metric-card"><div><div class="metric-label">Total bird visits</div><div class="metric-value">{{summary.birds}}</div></div><i class="fa fa-crow metric-icon" aria-hidden="true"></i></div>
